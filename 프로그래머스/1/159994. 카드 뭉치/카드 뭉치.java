@@ -9,7 +9,6 @@ class Solution {
                 cards1Index++;
             }else if(cards2Index < cards2.length && goal[i].equals(cards2[cards2Index])){
                 cards2Index++;
-                
             }else{
                 return "No";
             }
