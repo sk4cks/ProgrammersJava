@@ -29,6 +29,7 @@ class Solution {
                 if(toCount>fromCount) result.put(friends[i], result.get(friends[i])+1);
                 else if(toCount<fromCount) result.put(friends[j], result.get(friends[j])+1);
                 else{
+                    /*선물지수 비교*/
                     int toIndex = futuresIndex.get(friends[i]);
                     int fromIndex = futuresIndex.get(friends[j]);
 
