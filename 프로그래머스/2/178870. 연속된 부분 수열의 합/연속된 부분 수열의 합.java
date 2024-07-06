@@ -1,7 +1,7 @@
 class Solution {
     public int[] solution(int[] sequence, int k) {
         int N = sequence.length;
-        int range = 1000001;
+        int range = N;
         int sum = 0;
         int[] answer = new int[2];
         for(int L=0,R=0;L< N;L++){
