@@ -1,8 +1,8 @@
 class Solution {
     public int[] solution(int[] sequence, int k) {
         int N = sequence.length;
-        int range = N;
         int sum = 0;
+        int range = N;
         int[] answer = new int[2];
         for(int L=0,R=0;L< N;L++){
             while (R<N && sum<k){
