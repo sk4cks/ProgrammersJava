@@ -3,7 +3,7 @@ class Solution {
         int N = sequence.length;
         int range = 1000001;
         int sum = 0;
-        int[] answer = {0,N};
+        int[] answer = new int[2];
         for(int L=0,R=0;L< N;L++){
             while (R<N && sum<k){
                 sum+=sequence[R++];
