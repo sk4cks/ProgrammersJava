@@ -1,35 +1,14 @@
-import java.util.*;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
 class Solution {
     public int solution(int n, int k) {
-        int convertIndex = 0;
         int answer = 0;
-        List<Integer> indexs = new ArrayList<>();
         String convertNumber = convertDecimalToBase(n,k);
 
-        Matcher matcher = Pattern.compile("0").matcher(convertNumber);
-        while (matcher.find()) {
-            indexs.add(matcher.start());
+        String[] numbers = convertNumber.split("0");
+        for(int i=0; i<numbers.length; i++){
+            if(!numbers[i].equals("") 
+               && isPrime(Long.parseLong(numbers[i]))) answer++;
         }
-
-        if(indexs.size() > 0){
-            Collections.sort(indexs);
-            for(int i=0; i<indexs.size(); i++){
-                String number = "";
-                int zeroIndex = indexs.get(i);
-                for(int j=convertIndex; j<zeroIndex; j++){
-                    number+= convertNumber.charAt(j);
-                    convertIndex = zeroIndex+1;
-                }
-                if(!number.equals("") && isPrime(Long.parseLong(number))) answer++;
-            }
-            String s = convertNumber.substring(convertIndex,convertNumber.length());
-            if(!s.equals("") && isPrime(Long.parseLong(s))) answer++;
-        }else {
-            if(isPrime(Long.parseLong(convertNumber))) answer++;
-        }
+        
         return answer;
     }
     
