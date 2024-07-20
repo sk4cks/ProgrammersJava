@@ -16,9 +16,11 @@ class Solution {
                 String x = String.valueOf(s.charAt((i+j)%s.length()));
 
                 if(stack.isEmpty() || baseMap.get(x) == null){
-                    stack.add(x);
+                    stack.push(x);
                 }else if(baseMap.get(x).equals(stack.peek())){
                     stack.pop();
+                }else{
+                    break;
                 }
             }
             if(stack.isEmpty()) answer++;
