@@ -22,7 +22,8 @@ class Solution {
             if(Math.abs(newX) > 5 || Math.abs(newY) > 5) continue;
 
             String newPoint = ""+newX+newY;
-            if( !set.contains(oldPoint+newPoint) ||  !set.contains(newPoint+oldPoint)) {
+            if( !set.contains(oldPoint+newPoint) ||
+               !set.contains(newPoint+oldPoint)) {
                 set.add(oldPoint+newPoint);
                 set.add(newPoint+oldPoint);
                 answer++;
