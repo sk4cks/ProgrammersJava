@@ -7,23 +7,23 @@ class Solution {
     public int solution(String[][] book_time) {
         int answer = 0;
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
-        List<String> list = new ArrayList<>();
+        PriorityQueue<String[]> que = new PriorityQueue<>(Comparator.comparing(o -> o[1]));
         Arrays.sort(book_time, Comparator.comparing(o -> o[0]));
 
         for(int i=0; i<book_time.length; i++){
-            LocalTime time = LocalTime.parse(book_time[i][0],formatter);
-            Optional<String> firstMatch = list.stream()
-                    .filter(item -> ChronoUnit.MINUTES.between
-                            (LocalTime.parse(item,formatter),time) >= 10)
-                    .findFirst();
-
-            if(firstMatch.orElse(null) !=null) {
-                int index = list.indexOf(firstMatch.get());
-                list.remove(index);
+            if(que.isEmpty()){
+                que.add(book_time[i]);
+            }else{
+                LocalTime time = LocalTime.parse(book_time[i][0],formatter);
+                String[] arr = que.peek();
+                long diff = ChronoUnit.MINUTES.between
+                    (LocalTime.parse(arr[1],formatter),time);
+                
+                if(diff >= 10) que.poll();
+                que.add(book_time[i]);
             }
-            list.add(book_time[i][1]);
         }
-        answer = list.size();
+        answer = que.size();
         
         return answer;
     }
