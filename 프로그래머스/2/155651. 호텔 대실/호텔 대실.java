@@ -19,7 +19,7 @@ class Solution {
                 long diff = ChronoUnit.MINUTES.between
                     (LocalTime.parse(arr[1],formatter),time);
                 
-                if(diff >= 10) que.poll();
+                if( diff >= 10 ) que.poll();
                 que.add(book_time[i]);
             }
         }
