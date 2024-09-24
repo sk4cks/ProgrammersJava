@@ -2,16 +2,16 @@ import java.util.*;
 
 class Solution {
     public int[] solution(int N, int[] stages) {
-        int[] answer = new int[N];
+        int[] answer = {};
         Map<Integer,Integer> map = new HashMap<>();
-        List<Map<String,Double>> list = new ArrayList<>();
+        Map<Integer,Double> stageMap = new HashMap<>();
+        List<Integer> list = new ArrayList<>();
 
         for(int i=0; i< stages.length; i++){
             map.put(stages[i],map.getOrDefault(stages[i],0)+1);
         }
 
         for(int i=1; i<=N; i++){
-            Map<String,Double> stage = new HashMap<>();
             double failureRate = 0;
             int count = 0;
            for(int key : map.keySet()){
@@ -21,16 +21,13 @@ class Solution {
 
            if(count !=0 && failCount != 0) failureRate = (double) failCount/count;
 
-            stage.put("stage", (double) i);
-            stage.put("failureRate",failureRate);
-            list.add(stage);
+            stageMap.put(i,failureRate);
+            list.add(i);
         }
-        Collections.sort(list,(a,b) ->  
-                         b.get("failureRate").compareTo(a.get("failureRate")) );
 
-        for(int i=0; i< list.size(); i++) {
-            answer[i] = list.get(i).get("stage").intValue();
-        }
+        list.sort((a,b) -> stageMap.get(b).compareTo(stageMap.get(a)));
+
+        answer = list.stream().mapToInt(i->i).toArray();
         
         return answer;
     }
