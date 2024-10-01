@@ -4,17 +4,10 @@ class Solution {
 
         for(int i=0; i<arr1.length; i++){
             StringBuilder sb = new StringBuilder();
-            String str1 = lpad(Integer.toString(arr1[i],2),n,'0');
-            String str2 = lpad(Integer.toString(arr2[i],2),n,'0');
-
-            for(int j=0; j<str1.length(); j++){
-                char chr1 = str1.charAt(j);
-                char chr2 = str2.charAt(j);
-
-                if(chr1=='0' && chr2=='0') sb.append(" ");
-                else sb.append("#");
-            }
-            answer[i] = sb.toString();
+            String str = lpad(Integer.toString(arr1[i]|arr2[i],2),n,'0');
+            str = str.replace("0"," ");
+            str = str.replace("1","#");
+            answer[i] = str;
         }
         
         return answer;
