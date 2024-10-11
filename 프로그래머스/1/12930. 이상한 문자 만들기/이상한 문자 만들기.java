@@ -6,16 +6,11 @@ class Solution {
         
         for(int i=0; i<s.length(); i++) {
             char word = s.charAt(i);
-            
-            if(word == ' ') {
-                cnt = 0;
-                sb.append(word);
-                continue;
-            }
-            
-            if(cnt%2 == 0) sb.append(String.valueOf(word).toUpperCase());
-            else sb.append(String.valueOf(word).toLowerCase());
-            cnt++;
+
+            cnt = word == ' ' ? 0 : cnt+1;
+
+            if(cnt%2 == 0) sb.append(String.valueOf(word).toLowerCase());
+            else sb.append(String.valueOf(word).toUpperCase());
         }
         
         answer = sb.toString();
