@@ -6,13 +6,10 @@ class Solution {
             char word = s.charAt(i);
 
             if(word != ' '){
-                int seq = 0;
-                if(97 <= word && word <= 122) seq = 97;
-                if(65 <= word && word <= 90) seq = 65;
+                char ch = 'A';
+                if(Character.isLowerCase(word)) ch = 'a';
 
-                word = (char) ((word+n)%seq);
-                if(word > 25) word  = (char) ((word%25)-1);
-                word = (char) (word + seq) ;
+                word = (char) ((word - ch + n)%26 + ch);
             }
             sb.append(word);
         }
