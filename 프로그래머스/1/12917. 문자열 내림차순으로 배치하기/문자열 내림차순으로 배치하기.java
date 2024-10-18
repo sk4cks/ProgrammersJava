@@ -7,6 +7,7 @@ class Solution {
             .sorted(Collections.reverseOrder())
             .collect(Collectors.toList());
         
-        return list.stream().map(c -> String.valueOf(c)).collect(Collectors.joining());
+        return list.stream().map(c -> String.valueOf(c))
+            .collect(Collectors.joining());
     }
 }
