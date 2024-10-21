@@ -12,7 +12,6 @@ class Solution {
         long endTime = getTime(op_end);
         
         posTime = checkOpening(startTime, endTime, posTime);
-        posTime = checkVideoTime(videoTime,posTime);
         
         for(int i=0; i<commands.length; i++) {
             posTime += map.get(commands[i]);
