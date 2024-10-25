@@ -7,7 +7,8 @@ class Solution {
         int answer = 0;
         
         for(int i=0; i< tangerine.length; i++){
-            map.put(tangerine[i],map.get(tangerine[i]) == null? 1 : map.get(tangerine[i])+1);
+            map.put(tangerine[i],map.get(tangerine[i]) == null
+                    ? 1 : map.get(tangerine[i])+1);
         }
         
         List<Integer> countList = new ArrayList<>(map.values());
