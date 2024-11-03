@@ -5,7 +5,7 @@ class Solution {
         Arrays.sort(files, Comparator.comparing(
             s -> ((String) s).toLowerCase().replaceAll("\\d.*",""))
                 .thenComparing(
-                    s -> Long.parseLong(((String) s).replaceAll(".*?(\\d+).*", "$1"))));
+                    s -> Integer.parseInt(((String) s).replaceAll(".*?(\\d+).*", "$1"))));
         
         return files;
     }
