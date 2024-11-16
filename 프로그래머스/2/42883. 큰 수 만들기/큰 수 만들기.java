@@ -12,6 +12,8 @@ class Solution {
                     max = arr[j];
                     index = j+1;
                 }
+                
+                if(max==9) break;
             }
             sb.append(max);
         }
