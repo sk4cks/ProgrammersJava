@@ -1,26 +1,20 @@
 class Solution {
     public String solution(String number, int k) {
-        StringBuilder sb = new StringBuilder(number);
-        char[] arr = number.toCharArray();
+        StringBuilder sb = new StringBuilder();
+        int index = 0;
+        char max = 0;
 
-        for(int i=0; i<arr.length; i++) {
-            for(int j=i+1; j<=k+i; j++) {
-                if(j==arr.length || arr[i]==9) break;
-                if(arr[i] < arr[j]) {
-                    sb.setCharAt(i,' ');
-                    k--;
-                    break;
+        for(int i=0; i<number.length()-k; i++) {
+            max = 0;
+            for(int j=index; j<=i+k; j++) {
+                if(number.charAt(j) > max) {
+                    max = number.charAt(j);
+                    index = j+1;
                 }
             }
-            if(k==0) break;
-        }
-
-        if(k>0) {
-            for(int i=sb.length()-1; i>=sb.length()-k; i--) {
-                sb.setCharAt(i,' ');
-            }
+            sb.append(max);
         }
         
-        return sb.toString().replaceAll(" ","");
+        return sb.toString();
     }
 }
