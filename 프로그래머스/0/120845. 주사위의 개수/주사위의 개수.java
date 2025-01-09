@@ -3,11 +3,8 @@ class Solution {
         int answer = 1;
         
         for(int i=0; i<box.length; i++) {
-            box[i] = (box[i]/n) * n;
-            answer *= box[i];
+            answer *= box[i]/n;
         }
-        
-        answer /= Math.pow(n,3);
         
         return answer;
     }
