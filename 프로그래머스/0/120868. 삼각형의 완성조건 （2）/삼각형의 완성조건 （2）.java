@@ -3,19 +3,13 @@ import java.util.Set;
 
 class Solution {
     public int solution(int[] sides) {
-        Set<Integer> set = new HashSet<>();
-
         int max = Math.max(sides[0],sides[1]) + 1;
         int a = Math.abs(sides[0] - sides[1]) + 1;
+        int answer = 0;
 
-        while (a < max) {
-            set.add(a++);
-        }
-
-        while (max < sides[0] + sides[1]) {
-            set.add(max++);
-        }
+        answer += max - a;
+        answer += sides[0] + sides[1] - max;
         
-        return set.size();
+        return answer;
     }
 }
