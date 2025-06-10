@@ -12,11 +12,11 @@ class Solution {
                 case "down":
                     answer[1] = Math.max(answer[1] - 1, -maxY);
                     break;
-                case "left":
-                    answer[0] = Math.max(answer[0] - 1, -maxX);
-                    break;
                 case "right":
                     answer[0] = Math.min(answer[0] + 1, maxX);
+                    break;
+                case "left":
+                    answer[0] = Math.max(answer[0] - 1, -maxX);
                     break;
             }
         }
