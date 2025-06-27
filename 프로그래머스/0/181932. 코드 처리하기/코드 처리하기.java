@@ -7,7 +7,7 @@ class Solution {
             char c = code.charAt(i);
             if(c == '1') {
                 mode = !mode;
-            }else if((mode && i%2 == 1) || (!mode && i%2 == 0)) {
+            }else if(mode == (i%2 == 1)) {
                 sb.append(c);
             }
         }
