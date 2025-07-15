@@ -6,7 +6,7 @@ class Solution {
             answer++;
             schedules[i] += 10;
             if(schedules[i] % 100 > 59) {
-                schedules[i] += 40;
+                schedules[i] = ((schedules[i] / 100) + 1) * 100 + ((schedules[i] % 100) - 60);
             }
             for(int j=0; j<timelogs[i].length; j++) {
                 if((startday + j-1) % 7 > 4) continue;
