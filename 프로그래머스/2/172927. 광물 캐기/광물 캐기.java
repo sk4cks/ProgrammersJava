@@ -47,9 +47,6 @@ class Solution {
             dp = ip = sp = 0;
         }
         
-    
-
-        //돌로 캤을 때 피로도가 가장 높은 순으로 내림차순 정렬
         Arrays.sort(section, (o1, o2) -> (o2[2]-o1[2]));
         
         //다이아 -> 철 -> 돌 순서대로 캐기
