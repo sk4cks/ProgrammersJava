@@ -9,7 +9,7 @@ class Solution {
         return answer;
     }
     
-    void backTracking(int depth, int n) {
+    public void backTracking(int depth, int n) {
         if (depth == n) {
             answer++;
             return;
@@ -22,7 +22,7 @@ class Solution {
         }
     }
     
-    boolean valid(int i) {
+    public boolean valid(int i) {
         for (int j = 0; j < i; j++) { // 마지막으로 놓여진 것과 이전의 것들을 비교
             if (board[i] == board[j]) return false;
             if (Math.abs(i - j) == Math.abs(board[i] - board[j])) return false;
