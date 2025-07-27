@@ -3,7 +3,6 @@ class Solution {
     int answer = 0;
     public int solution(int n) {
         board = new int[n];
-        
         backTracking(0, n);
         
         return answer;
