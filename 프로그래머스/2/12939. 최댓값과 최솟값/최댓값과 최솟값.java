@@ -6,8 +6,11 @@ class Solution {
         String[] arr = s.split(" ");
         int[] nums = Arrays.asList(arr).stream()
             .mapToInt(Integer::parseInt).toArray();
+        
         Arrays.sort(nums);
+        
         answer = nums[0]+" "+nums[nums.length-1];
+        
         return answer;
     }
 }
