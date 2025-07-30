@@ -2,12 +2,14 @@ class Solution {
     int[] board;
     int answer = 0;
     public int solution(int n) {
+        // 배열의 값은 해당 행의 queen이 있는 '열(column)'을 의미함
         board = new int[n];
         backTracking(0, n);
         
         return answer;
     }
     
+    // depth는 행을 의미함
     public void backTracking(int depth, int n) {
         if (depth == n) {
             answer++;
