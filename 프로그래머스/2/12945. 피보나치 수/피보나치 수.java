@@ -6,12 +6,13 @@ class Solution {
         Queue<Integer> que = new LinkedList<>();
         int answer = 0;
         int index = 0;
+        
         que.add(0);
         que.add(1);
 
         while (index < n){
             index++;
-            que.add((que.poll() + que.peek())%1234567);
+            que.add((que.poll() + que.peek()) % 1234567);
         }
         
         answer = que.peek();
