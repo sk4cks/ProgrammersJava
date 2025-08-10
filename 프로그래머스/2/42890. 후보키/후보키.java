@@ -8,10 +8,8 @@ class Solution {
 		int colLen = relation[0].length;
 		
 		for(int set = 1 ; set < (1 << colLen) ; set++) {
-			// 최소성 검사 
 			if(!isMinimal(set, candidateKey)) continue;
 			
-			// 유일성 검사 
 			if(isUnique(set, rowLen, colLen, candidateKey, relation)) {
 				System.out.println(Integer.toBinaryString(set));
 				candidateKey.add(set);
