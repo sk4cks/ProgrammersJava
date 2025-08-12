@@ -1,7 +1,7 @@
 class Solution {
     public int solution(int n, int w, int num) {
         int answer = 0;
-        int[][] boxes = new int[(n+w-1)/w][w];
+        int[][] boxes = new int[(n + w - 1) / w][w];
         int startNum = 1;
         int[] targetArr = new int[2];
         
