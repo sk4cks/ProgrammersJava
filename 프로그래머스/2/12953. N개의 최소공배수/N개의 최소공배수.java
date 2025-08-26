@@ -14,7 +14,12 @@ class Solution {
     
     //최대공약수 구하기
     int getGcd(int a, int b) {
-        if(a%b == 0) return b;
-        return getGcd(b,a%b);
+        while (b != 0) {
+            int temp = b;
+            b = a % b;
+            a = temp;
+        }
+        
+        return a;
     }
 }
