@@ -13,8 +13,10 @@ class Solution {
         for(int i=0; i< discount.length-9; i++){
             boolean flag = false;
             copyMap = new HashMap<>(map);
+            
             for(int j=0; j<10; j++){
                 if(copyMap.getOrDefault(discount[i+j],0) <= 0) break;
+                
                 copyMap.put(discount[i+j], copyMap.get(discount[i+j]) - 1 );
 
                 if(j==9) flag = true;
