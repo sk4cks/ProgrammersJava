@@ -1,26 +1,33 @@
 class Solution {
     public int[] solution(long begin, long end) {
-        int[] answer = new int[(int) (end - begin) + 1];
+        int size = (int) (end - begin) + 1;
+        int[] answer = new int[size];
 
-        for (int i = 0; i < answer.length ; i++) {
-            long num = begin + i;
-
-            for (long div = 2; div <= Math.sqrt(num); div++) {
-                if (num % div == 0) {
-                    if (num / div > 10000000){
-                        answer[i] = (int) div;
-                        continue;
-                    } else{
-                        answer[i] = (int) (num / div);
-                    }
-                    break;
-                }
-            }
-            if (answer[i] == 0) //소수인 경우
-                answer[i] = 1; //약수가 1과 자기자신 밖에 없다.
+        for(long i=begin; i<=end; i++) {
+            answer[(int) (i-begin)] = getBlock((int)i);
         }
-        if (begin == 1)
-            answer[0] = 0;
+        
         return answer;
     }
+    
+    int getBlock(int i) {
+        if(i == 1) return 0;
+        
+        int result = 1;
+
+        //약수 찾는 for
+        for(int j=2; j*j<=i; j++) {
+            if(i%j == 0) {
+                if(i/j <= 10000000) {
+                    result = i/j;
+                    break;
+                } else {
+                    result = j;
+                }
+            }
+        }
+
+        return result;
+    }
+    
 }
