@@ -19,6 +19,7 @@ class Solution {
         for(int j=2; j*j<=i; j++) {
             if(i%j == 0) {
                 if(i/j <= 10000000) {
+                    //i가 제일 작은 약수이면 i/j는 제일 큰 약수임 따라서 반복문 종료
                     result = i/j;
                     break;
                 } else {
