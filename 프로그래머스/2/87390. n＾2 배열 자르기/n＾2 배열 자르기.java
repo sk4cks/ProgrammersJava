@@ -6,7 +6,7 @@ class Solution {
         for(long i=left; i<=right; i++){
             long col = i%n;
             long row = i/n;
-            answer[index++] = (int) (row < col ? row+1+(col-row) : row+1);
+            answer[index++] = (int) (Math.max(row, col) + 1);
         }
         
         return answer;
