@@ -9,7 +9,9 @@ class Solution {
             map.put(clothes[i][1],map.getOrDefault(clothes[i][1],1)+1);
         }
 
-        answer = map.values().stream().reduce(answer,(a,b) -> a*b);
+        for (int count : map.values()) {
+            answer *= count;
+        }
         
         return --answer;
     }
