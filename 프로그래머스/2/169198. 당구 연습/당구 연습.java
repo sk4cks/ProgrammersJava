@@ -23,7 +23,7 @@ class Solution {
                 
                 int dx = startX - mx;
                 int dy = startY - my;
-                int dist = dx * dx + dy * dy;
+                int dist = (int) (Math.pow(dx,2) + Math.pow(dy,2));
                 
                 // 예외 케이스: 같은 x 또는 같은 y 선상에 있을 때
                 if (startX == targetX) {
