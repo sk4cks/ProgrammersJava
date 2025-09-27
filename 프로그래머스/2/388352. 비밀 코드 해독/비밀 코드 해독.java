@@ -42,13 +42,14 @@ class Solution {
     private void generateCombinations(int n, int r, int start, int[] temp, int depth, List<int[]> result) {
         // 5개를 다 뽑았으면 결과 리스트에 추가
         if (depth == r) {
-            result.add(temp.clone()); // clone() 안 하면 참조 공유됨
+            result.add(temp.clone());
             return;
         }
+        
         // 현재 자리(depth)에 들어갈 숫자를 start~n까지 반복
         for (int i = start; i <= n; i++) {
             temp[depth] = i; // 숫자 선택
-            generateCombinations(n, r, i + 1, temp, depth + 1, result); // 다음 자리 채우기
+            generateCombinations(n, r, i + 1, temp, depth + 1, result);
         }
     }
 }
