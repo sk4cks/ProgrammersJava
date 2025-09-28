@@ -1,55 +1,54 @@
 import java.util.*;
 
 class Solution {
+    
+    int answer = 0; // 정답 개수를 세는 전역 변수
+    
     public int solution(int n, int[][] q, int[] ans) {
-        int answer = 0;
         
-        // 1~n 중에서 5개를 고르는 모든 조합을 저장할 리스트
-        List<int[]> combinations = new ArrayList<>();
-        // 조합 생성 시작
-        generateCombinations(n, 5, 1, new int[5], 0, combinations);
-
-        // 생성된 모든 조합을 하나씩 확인
-        for (int[] candidate : combinations) {
-            // 후보 조합을 Set으로 변환 (포함 여부 빠르게 확인하기 위해)
-            Set<Integer> code = new HashSet<>();
-            for (int c : candidate) code.add(c);
-
-            boolean valid = true; // 조건 만족 여부
-            // 모든 질문 q[i]에 대해 검사
-            for (int i = 0; i < q.length; i++) {
-                int match = 0; // 현재 질문에서 겹치는 숫자 개수
-                for (int num : q[i]) {
-                    if (code.contains(num)) match++; // 후보 코드에 있으면 카운트
-                }
-                // 겹치는 개수가 ans[i]와 다르면 조건 불만족
-                if (match != ans[i]) {
-                    valid = false;
-                    break;
-                }
-            }
-            // 모든 조건을 만족했다면 유효한 코드 → 카운트 증가
-            if (valid) answer++;
-        }
+        // DFS를 이용해 1~n까지 숫자 중 5개를 고르는 모든 조합 탐색 시작
+        dfs(n, q, ans, 1, new ArrayList<>());
         
         return answer;
     }
     
-    /**
-     * 조합 생성 함수
-     * n까지 숫자(1~n) 중에서 r개를 뽑아 조합을 만드는 재귀 함수
-     */
-    private void generateCombinations(int n, int r, int start, int[] temp, int depth, List<int[]> result) {
-        // 5개를 다 뽑았으면 결과 리스트에 추가
-        if (depth == r) {
-            result.add(temp.clone());
+    // DFS: 조합 생성 (n: 숫자 개수, q: 질문 배열, ans: 정답 배열, start: 시작 숫자, list: 현재 선택한 숫자들)
+    void dfs(int n, int[][] q, int[] ans, int start, List<Integer> list) {
+        
+        if(list.size() == 5) {  // 5개를 뽑았을 경우
+            
+            // 현재 조합(list)이 조건을 만족하는지 검증
+            if(checkValidation(q, ans, list)) answer++;
             return;
         }
-        
-        // 현재 자리(depth)에 들어갈 숫자를 start~n까지 반복
-        for (int i = start; i <= n; i++) {
-            temp[depth] = i; // 숫자 선택
-            generateCombinations(n, r, i + 1, temp, depth + 1, result);
+
+        // start부터 n까지 순차적으로 숫자를 하나씩 선택
+        for (int i=start; i<=n; i++) {
+            list.add(i);                // 숫자 선택
+            dfs(n, q, ans, i+1, list);  // 다음 숫자는 i+1부터 시작 (중복 방지)
+            list.remove(list.size()-1); // 백트래킹 (선택한 숫자 취소)
         }
     }
+    
+    // 현재 조합(list)이 주어진 조건(q, ans)을 만족하는지 검사
+    boolean checkValidation(int[][] q, int[] ans, List<Integer> list) {
+        for (int i=0; i<q.length; i++) {            // 각 질문에 대해
+            int cnt = 0;
+            for (int j=0; j<q[i].length; j++) {     // 질문에 포함된 숫자들 확인
+                for (int k=0; k<list.size(); k++) { // 현재 뽑은 조합과 비교
+                    if (list.get(k) == q[i][j]) {   // 조합에 포함되면 카운트 증가
+                        cnt++;
+                        break;                      // 같은 숫자는 한 번만 세면 됨
+                    }
+                }
+            }
+
+            // 해당 질문의 정답 개수(ans[i])와 맞지 않으면 실패
+            if(cnt != ans[i]) return false;
+        }
+
+        // 모든 질문의 조건을 만족하면 true
+        return true;
+    }
+    
 }
