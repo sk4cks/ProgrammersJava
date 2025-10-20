@@ -21,7 +21,7 @@ class Solution {
             return;
         }
 
-        // 라이언이 점수를 가져올때
+        // 라이언이 점수를 획득할때
         if (cnt > apeachArr[idx]) {
             ryanArr[idx] = apeachArr[idx] + 1;
             dfs(idx + 1, cnt - (apeachArr[idx] + 1), apeachArr, ryanArr);
