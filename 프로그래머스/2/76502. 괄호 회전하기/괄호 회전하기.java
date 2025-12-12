@@ -28,11 +28,13 @@ class Solution {
                 }else if(baseMap.get(x).equals(stack.peek())){
                     stack.pop();
                     
+                //아니면 잘못된 괄호
                 }else{
                     break;
                 }
             }
             
+            //한 번의 회전 검사 끝에 스택이 비어있다면 올바른 괄호
             if(stack.isEmpty()) answer++;
         }
         
