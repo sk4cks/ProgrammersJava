@@ -1,21 +1,28 @@
 class Solution {
     public int solution(int n) {
-        int mod = 1000000007;
+        int mod = 1000000007;   // 결과를 나눌 모듈러 값 (오버플로우 방지)
 
-        long[] arr = new long[n+1];
-        arr[0] = 1;
-        arr[2] = 3;
+        long[] arr = new long[n+1]; // dp 배열: arr[i]는 가로 길이 i를 채우는 경우의 수
+        arr[0] = 1; // 길이가 0인 경우: 아무 것도 놓지 않는 1가지 경우
+        arr[2] = 3; // 길이가 2인 경우: 3가지 경우의 수
 
+        // 짝수 길이에 대해서만 계산 (홀수는 채울 수 없음)
         for (int i=4; i<=n; i+=2) {
+            
+            // 기본 패턴:
+            // 길이 i-2에서 2칸짜리 기본 블록을 붙이는 경우 (3가지)
             arr[i] = arr[i-2] * 3;
 
+            // 특수 패턴:
+            // i-4 이하의 이전 상태에서 만들어지는 추가적인 경우들
             for (int j=i-4; j>=0; j-=2) {
-                arr[i] += arr[j]*2;
+                arr[i] += arr[j]*2; // 각 경우마다 2가지의 특수 패턴이 존재
             }
 
-            arr[i] %= mod;
+            arr[i] %= mod;  // 모듈러 연산
         }
         
+        // n 길이를 채우는 경우의 수 반환
         return (int) arr[n];
     }
 }
