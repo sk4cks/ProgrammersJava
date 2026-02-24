@@ -48,10 +48,6 @@ class Solution {
             answer[1] = 6; // 맞은 개수가 1개 이하이면 6등
         }
         
-        // 결과 출력 (디버깅용 코드)
-        for(int x : answer)
-            System.out.print(x + " ");
-        
         return answer;
     }
 }
