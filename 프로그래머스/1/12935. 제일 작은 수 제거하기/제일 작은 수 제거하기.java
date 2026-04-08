@@ -1,21 +1,23 @@
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-
 class Solution {
     public int[] solution(int[] arr) {
-        List<Integer> list = new ArrayList<>();
-        int[] copyArr = arr.clone();
-        int[] answer = {-1};
-
-        Arrays.sort(copyArr);
-        int min = copyArr[0];
-
-        for(int i=0; i<arr.length; i++) {
-            if(min != arr[i]) list.add(arr[i]);
+        int min = Integer.MAX_VALUE;
+        
+        // 최솟값 찾기
+        for(int n : arr) min = Math.min(min, n);
+        
+        // 개수 세기
+        int count = 0;
+        for(int n : arr) if(n != min) count++;
+        
+        if(count == 0) return new int[]{-1};
+        
+        int[] answer = new int[count];
+        int idx = 0;
+        
+        for(int n : arr){
+            if(n != min) answer[idx++] = n;
         }
-
-        if(list.size() > 0) answer = list.stream().mapToInt(i->i).toArray();
+        
         return answer;
     }
 }
