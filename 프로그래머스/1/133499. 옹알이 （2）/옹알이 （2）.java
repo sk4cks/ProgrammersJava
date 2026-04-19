@@ -1,49 +1,39 @@
 class Solution {
     public int solution(String[] babbling) {
-        // 발음할 수 있는 단어 목록
-        String[] list = {"aya", "ye", "woo", "ma"};
-        
-        int answer = 0;  // 조건을 만족하는 단어 개수
-        
-        // babbling 배열에 있는 각 단어 검사
-        for(int i = 0; i < babbling.length; i++){
-            
-            // 검사할 문자열
-            String s = babbling[i];
-            
-            // 발음 가능한 단어 4개를 하나씩 확인
-            for(int j = 0; j < list.length; j++){
-                
-                /*
-                 같은 발음이 연속으로 나오는지 검사
-                 예: "ayaaya", "yeye" 등
-                 이런 경우는 허용되지 않으므로 검사 중단
-                */
-                if(s.indexOf(list[j] + list[j]) != -1) 
-                    break;
-                
-                /*
-                 해당 발음이 문자열에 있으면
-                 공백으로 치환
-                 
-                 예:
-                 "ayawoo" → " woo" → "  "
-                */
-                s = s.replaceAll(list[j], " ");
+        String[] words = {"aya", "ye", "woo", "ma"};
+        int answer = 0;
+
+        // 각 단어 검사
+        for (String b : babbling) {
+            int idx = 0;          // 현재 검사 위치
+            String prev = "";     // 직전에 사용한 발음 (연속 방지)
+
+            while (idx < b.length()) {
+                boolean matched = false;
+
+                // 4가지 발음 중 하나와 매칭되는지 확인
+                for (String w : words) {
+
+                    // 이전 발음과 같은 경우 → 연속 사용 금지
+                    if (w.equals(prev)) continue;
+
+                    // 현재 위치에서 해당 발음으로 시작하는지 검사
+                    if (b.startsWith(w, idx)) {
+                        idx += w.length();  // 해당 길이만큼 이동
+                        prev = w;           // 이전 발음 저장
+                        matched = true;
+                        break;
+                    }
+                }
+
+                // 어떤 발음과도 매칭되지 않으면 실패
+                if (!matched) break;
             }
-            
-            // 공백 제거
-            s = s.replaceAll(" ", "");
-            
-            /*
-             모든 발음이 정상적으로 제거되었다면
-             문자열이 빈 문자열이 됨
-            */
-            if(s.equals("")) 
-                answer++;
+
+            // 끝까지 정상적으로 검사했으면 카운트
+            if (idx == b.length()) answer++;
         }
-        
-        // 조건을 만족하는 단어 개수 반환
+
         return answer;
     }
 }
