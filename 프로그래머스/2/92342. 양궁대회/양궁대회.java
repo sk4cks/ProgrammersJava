@@ -1,71 +1,71 @@
 import java.util.*;
 
 class Solution {
-    int maxDiff = 0;        // 최대 점수 차이
-    int[] answer = {-1};    // 라이언이 못이기는 경우 리턴 기본값
-    
+    static final int SIZE = 11; // 점수 개수 (10점 ~ 0점)
+
+    int maxDiff = 0;
+    int[] answer = {-1};
+
     public int[] solution(int n, int[] info) {
-        dfs(0, n, info, new int[11]);
-        
+        dfs(0, n, info, new int[SIZE]);
         return answer;
     }
-    
-    // dfs(인덱스, 남은화살, 어피치배열, 라이언배열)
-    void dfs(int idx, int cnt, int[] apeachArr, int[] ryanArr) {
-        
-        // 마지막일경우 0점에 남은화살을 넣고 점수체크
-        if (idx == 11 || cnt == 0) {
-            ryanArr[10] += cnt;
-            checkScore(apeachArr, ryanArr);
-            ryanArr[10] -= cnt;     // 백트래킹을 위한 원복
+
+    // dfs(현재 점수 인덱스, 남은 화살 수, 어피치, 라이언)
+    void dfs(int scoreIdx, int arrows, int[] apeach, int[] ryan) {
+
+        // 종료 조건: 마지막 점수 or 화살 소진
+        if (scoreIdx == SIZE || arrows == 0) {
+            ryan[SIZE - 1] += arrows; // 남은 화살은 0점에 몰아줌
+            evaluate(apeach, ryan);
+            ryan[SIZE - 1] -= arrows; // 원복 (백트래킹)
             return;
         }
 
-        // 라이언이 점수를 획득할때
-        if (cnt > apeachArr[idx]) {
-            ryanArr[idx] = apeachArr[idx] + 1;
-            dfs(idx + 1, cnt - (apeachArr[idx] + 1), apeachArr, ryanArr);
-            ryanArr[idx] = 0;   // 백트래킹을 위한 원복
+        // 1. 해당 점수를 이기는 경우
+        if (arrows > apeach[scoreIdx]) {
+            ryan[scoreIdx] = apeach[scoreIdx] + 1;
+            dfs(scoreIdx + 1, arrows - ryan[scoreIdx], apeach, ryan);
+            ryan[scoreIdx] = 0; // 원복
         }
 
-        // 라이언이 점수를 포기할때
-        dfs(idx + 1, cnt, apeachArr, ryanArr);
+        // 2. 해당 점수를 포기하는 경우
+        dfs(scoreIdx + 1, arrows, apeach, ryan);
     }
-    
-    // 점수체크
-    void checkScore(int[] apeachArr, int[] ryanArr) {
+
+    // 점수 계산 및 결과 갱신
+    void evaluate(int[] apeach, int[] ryan) {
         int apeachScore = 0;
         int ryanScore = 0;
-        int diff = 0;
 
-        for (int i=0; i<apeachArr.length; i++) {
-            if (apeachArr[i] > 0 || ryanArr[i] > 0) {   // 둘다 0발이 아닌경우에만
-                if (ryanArr[i] > apeachArr[i]) {
-                    ryanScore += 10 - i;
-                } else {
-                    apeachScore += 10 - i;
-                }
+        for (int i = 0; i < SIZE; i++) {
+            if (apeach[i] == 0 && ryan[i] == 0) continue;
+
+            if (ryan[i] > apeach[i]) {
+                ryanScore += (10 - i);
+            } else {
+                apeachScore += (10 - i);
             }
         }
 
-        diff = ryanScore - apeachScore;
+        int diff = ryanScore - apeachScore;
+
+        // 라이언이 못 이기면 무시
         if (diff <= 0) return;
 
-        // 점수차이가 크거나 || (점수차이가 같은데 낮은 점수에 더 많이 쐈을때)
-        if (diff > maxDiff || (diff == maxDiff && checkLowerScore(answer, ryanArr))) {
+        // 더 큰 점수차 or 동일 점수차 + 낮은 점수 더 많이 맞힘
+        if (diff > maxDiff || (diff == maxDiff && isBetter(ryan, answer))) {
             maxDiff = diff;
-            answer = ryanArr.clone();
+            answer = ryan.clone();
         }
     }
 
-    // 가장 낮은 점수를 더 맞힌경우 체크
-    boolean checkLowerScore(int[] oldArr, int[] newArr) {
-        for (int i=oldArr.length-1; i>=0; i--) {
-            if (oldArr[i] < newArr[i]) return true;
-            else if (oldArr[i] > newArr[i]) return false;
+    // 낮은 점수를 더 많이 맞힌 경우 우선
+    boolean isBetter(int[] current, int[] best) {
+        for (int i = SIZE - 1; i >= 0; i--) {
+            if (current[i] > best[i]) return true;
+            if (current[i] < best[i]) return false;
         }
-
         return false;
     }
-    
 }
