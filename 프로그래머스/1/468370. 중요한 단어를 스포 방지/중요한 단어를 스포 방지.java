@@ -1,41 +1,65 @@
 import java.util.*;
 
 class Solution {
-    public int solution(String message, int[][] spoiler_ranges) {
-        // 시크릿 문자들 저장
-        int curIdx = 0;
+
+    public int solution(String message, int[][] spoilerRanges) {
+
+        // 스포일러 단어 저장
         List<String> spoilerWords = new ArrayList<>();
-        Set<String> noSpoilerWords = new HashSet<>();
+
+        // 스포일러가 아닌 단어 저장
+        Set<String> safeWords = new HashSet<>();
+
+        int searchIdx = 0;
+
+        // 메시지를 단어 단위로 순회
         for (String word : message.split(" ")) {
-            // 단어를 검사하고 시작할 위치를 해당 단어 뒤로 지정
-            // 똑같은 단어 나올때를 방지
-            int start = message.indexOf(word, curIdx);
+
+            /*
+             현재 단어의 실제 위치 탐색
+             (동일 단어가 여러 번 등장할 수 있으므로 searchIdx부터 검색)
+            */
+            int start = message.indexOf(word, searchIdx);
             int end = start + word.length() - 1;
-            curIdx = end + 1;
-            // 스포일러 범위에 조금이라도 걸치면 스포일러 단어에 저장
+
+            // 다음 탐색 시작 위치 갱신
+            searchIdx = end + 1;
+
             boolean isSpoiler = false;
-            for (int[] range: spoiler_ranges) {
+
+            // 스포일러 범위와 겹치는지 확인
+            for (int[] range : spoilerRanges) {
+
+                /*
+                 범위 겹침 조건
+                 start <= rangeEnd && end >= rangeStart
+                */
                 if (start <= range[1] && end >= range[0]) {
                     spoilerWords.add(word);
                     isSpoiler = true;
                     break;
                 }
             }
-            // 스포일러 단어가 아니면 아닌 단어들에 저장
+
+            // 스포일러 단어가 아니면 safeWords에 저장
             if (!isSpoiler) {
-                noSpoilerWords.add(word);
+                safeWords.add(word);
             }
         }
-        // 중요한 단어인지 확인
+
+        /*
+         중요한 단어:
+         - 스포일러 단어에는 포함
+         - 안전 단어에는 포함되지 않음
+        */
         Set<String> importantWords = new HashSet<>();
-        for (String spoilerWord : spoilerWords) {
-            // 중요한 단어에 이미 포함되지 않고 
-            // 스포일러가 아닌 단어에 포함되지 않으면 중요한 단어
-            if (!importantWords.contains(spoilerWord) && 
-                    !noSpoilerWords.contains(spoilerWord)) {
-                importantWords.add(spoilerWord);
+
+        for (String word : spoilerWords) {
+            if (!safeWords.contains(word)) {
+                importantWords.add(word);
             }
         }
+
         return importantWords.size();
     }
 }
