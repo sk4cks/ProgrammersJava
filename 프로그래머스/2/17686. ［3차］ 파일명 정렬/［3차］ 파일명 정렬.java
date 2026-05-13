@@ -1,27 +1,67 @@
 import java.util.*;
 
 class Solution {
+
     public String[] solution(String[] files) {
-        
-        // ✅ Arrays.sort()로 files 배열을 정렬
-        //   Comparator를 커스터마이징하여 HEAD와 NUMBER 기준으로 정렬 수행
-        Arrays.sort(files, Comparator.comparing(
-                // 🔹 첫 번째 비교 기준: HEAD (문자 부분)
-                //   - 파일명에서 숫자가 나오기 전까지의 문자를 모두 HEAD로 간주
-                //   - 정렬 시 대소문자 구분이 없도록 toLowerCase() 처리
-                //   - replaceAll("\\d.*", "") → 첫 숫자 이후의 모든 문자를 제거 → HEAD만 남김
-                s -> ((String) s).toLowerCase().replaceAll("\\d.*","")
-            )
-            // 🔹 두 번째 비교 기준: NUMBER (숫자 부분)
-            //   - HEAD가 같을 경우, 첫 번째 등장하는 숫자를 찾아서 정렬
-            //   - 정규식 ".*?(\\d+).*" : 문자열 중 첫 숫자 그룹(\\d+)을 캡처
-            //   - replaceAll()의 "$1"은 첫 번째 그룹(숫자 부분)을 의미
-            //   - Integer.parseInt()로 숫자로 변환해 정수 비교
-            .thenComparing(
-                s -> Integer.parseInt(((String) s).replaceAll(".*?(\\d+).*", "$1"))
-            )
-        );
-        
+
+        Arrays.sort(files, (a, b) -> {
+
+            // HEAD 추출 후 대소문자 무시 비교
+            String headA = getHead(a).toLowerCase();
+            String headB = getHead(b).toLowerCase();
+
+            int headCompare = headA.compareTo(headB);
+
+            // HEAD가 다르면 HEAD 기준 정렬
+            if (headCompare != 0) {
+                return headCompare;
+            }
+
+            // HEAD가 같으면 NUMBER 기준 정렬
+            int numberA = getNumber(a);
+            int numberB = getNumber(b);
+
+            return Integer.compare(numberA, numberB);
+        });
+
         return files;
+    }
+
+    // HEAD 추출
+    String getHead(String file) {
+
+        int idx = 0;
+
+        // 숫자가 나오기 전까지 탐색
+        while (idx < file.length() && !Character.isDigit(file.charAt(idx))) {
+            idx++;
+        }
+
+        return file.substring(0, idx);
+    }
+
+    // NUMBER 추출
+    int getNumber(String file) {
+
+        int start = 0;
+
+        // 숫자 시작 위치 찾기
+        while (!Character.isDigit(file.charAt(start))) {
+            start++;
+        }
+
+        int end = start;
+
+        /*
+         숫자 최대 5자리까지만 추출
+         (문제 조건)
+        */
+        while (end < file.length()
+                && Character.isDigit(file.charAt(end))
+                && end - start < 5) {
+            end++;
+        }
+
+        return Integer.parseInt(file.substring(start, end));
     }
 }
