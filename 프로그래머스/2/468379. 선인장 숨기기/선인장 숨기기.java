@@ -1,68 +1,43 @@
-import java.util.*;
+import java.util.Arrays;
 
 class Solution {
-
     public int[] solution(int m, int n, int h, int w, int[][] drops) {
+        int[] answer = {0 ,0};
+        int[][] wetSecondArr = new int[m][n]; // 젖는 초 배열
 
-        /*
-         grid[r][c]
-         = 해당 칸에 물방울이 처음 떨어진 시간(index)
-
-         초기값은 drops.length 로 설정
-         → 끝까지 물이 떨어지지 않은 칸 의미
-        */
-        int[][] grid = new int[m][n];
-
-        for (int[] row : grid) {
-            Arrays.fill(row, drops.length);
+        // 젖는 초 배열 안젖는초로 먼저 초기화
+        // ex) [1,2]영역이 안젖는 영역이면 1,2의 값은 drops.length
+        for (int[] wetSecond : wetSecondArr) {
+            Arrays.fill(wetSecond, drops.length);
         }
 
-        /*
-         물방울이 떨어진 최초 시간 기록
-         
-         예:
-         drops[3] = {2,1}
-         → (2,1)은 3초에 젖음
-        */
-        for (int i = 0; i < drops.length; i++) {
+        // ex) 5초에 [1,1]이 젖으면 wetSecondArr[1,1]의 값은 5
+        for (int i=0; i<drops.length; i++) {
+            int[] drop = drops[i];
+            int x = drop[0];
+            int y = drop[1];
 
-            int r = drops[i][0];
-            int c = drops[i][1];
-
-            // 가장 처음 떨어진 시간만 기록
-            if (grid[r][c] == drops.length) {
-                grid[r][c] = i;
+            if (wetSecondArr[x][y] == drops.length) {
+                wetSecondArr[x][y] = i;
             }
         }
 
-        /*
-         이분탐색
-
-         "K초까지 안전한 h x w 영역 존재 여부"를 검사
-        */
         int left = 0;
         int right = drops.length;
 
-        int[] answer = {0, 0};
-
+        // 젖는 초 기준 이분탐색
         while (left <= right) {
-
             int mid = (left + right) / 2;
 
-            /*
-             mid초까지 안전한 영역 탐색
-             
-             존재하면:
-             → 더 늦은 시간도 가능한지 탐색
-             
-             없으면:
-             → 시간을 줄여야 함
-            */
-            int[] pos = findSafeZone(m, n, h, w, grid, mid);
+            // 젖는 초 기준 선인장영역 찾기
+            int[] safeZone = findSafeZone(m, n, h, w, wetSecondArr, mid);
 
-            if (pos != null) {
-                answer = pos;
+            // 안젖는 선인장 영역이 있으면 시간초를 더 늦출수 있는지 확인
+            if (safeZone != null) {
                 left = mid + 1;
+                answer = safeZone;
+                
+            // 안젖는 선인장 영역이 없으면 시간초을 앞당겨서 확인
             } else {
                 right = mid - 1;
             }
@@ -70,74 +45,45 @@ class Solution {
 
         return answer;
     }
+    
+    // 안젖는 선인장 영역 찾기
+    public int[] findSafeZone(int m, int n, int h, int w, int[][] wetSecondArr, int mid) {
+        int[][] subSumArr = new int[m+1][n+1]; // 왼쪽 위 사각형 누적합 배열 (pSum[i+1][j+1] = val[0~i][0~j] 합)
 
-    /*
-     K초까지 안전한 h x w 영역 탐색
-     
-     return:
-     - 존재하면 시작 좌표 반환
-     - 없으면 null
-    */
-    private int[] findSafeZone(int m, int n, int h, int w,
-                               int[][] grid, int K) {
+        // 왼쪽 위 
+        for (int x=0; x<m; x++) {
+            for (int y=0; y<n; y++) {
+                // 초 기준 젖어있으면 1 아니면 0
+                int wetVal = wetSecondArr[x][y] < mid ? 1 : 0;
 
-        /*
-         누적합 배열
-         
-         pSum[i][j]
-         = (0,0) ~ (i-1,j-1)까지 젖은 칸 개수
-        */
-        int[][] pSum = new int[m + 1][n + 1];
-
-        // 누적합 생성
-        for (int i = 0; i < m; i++) {
-            for (int j = 0; j < n; j++) {
-
-                /*
-                 K초 이전에 물이 떨어졌으면 젖은 칸
-                */
-                int val = (grid[i][j] < K) ? 1 : 0;
-
-                pSum[i + 1][j + 1]
-                        = val
-                        + pSum[i][j + 1]
-                        + pSum[i + 1][j]
-                        - pSum[i][j];
+                // 현재 칸 = val + 위쪽 누적 + 왼쪽 누적 - 겹친 모서리
+                subSumArr[x+1][y+1] = wetVal + subSumArr[x+1][y] + subSumArr[x][y+1] - subSumArr[x][y];
             }
         }
 
-        /*
-         모든 h x w 영역 검사
-        */
-        for (int i = h; i <= m; i++) {
-            for (int j = w; j <= n; j++) {
+        for (int i=h; i<=m; i++) {
+            for (int j=w; j<=n; j++) {
+                // subSumArr 네 꼭짓점으로 가운데 h×w 합 계산 (O(1))
+                //
+                //   ①(i-h,j-w) ─── ③(i-h,j)
+                //        │    h×w     │
+                //   ②(i,j-w)   ───   ④(i,j)
+                //
+                // ① subSumArr[i-h][j-w]  → + (겹친 모서리, 두 번 뺀 만큼 복구)
+                // ② subSumArr[i][j-w]    → - (왼쪽 띠)
+                // ③ subSumArr[i-h][j]    → - (위쪽 띠)
+                // ④ subSumArr[i][j]      → + (전체, h×w + 바깥 래퍼 포함)
+                //
+                // sum = ④ - ③ - ② + ①
+                int sum = subSumArr[i][j] - subSumArr[i-h][j] - subSumArr[i][j-w] + subSumArr[i-h][j-w];
 
-                /*
-                 현재 사각형 내부 젖은 칸 개수 계산
-
-                 좌상단:
-                 (i-h, j-w)
-
-                 우하단:
-                 (i-1, j-1)
-                */
-                int sum =
-                        pSum[i][j]
-                      - pSum[i - h][j]
-                      - pSum[i][j - w]
-                      + pSum[i - h][j - w];
-
-                /*
-                 젖은 칸이 하나도 없으면
-                 안전 영역 발견
-                */
                 if (sum == 0) {
-                    return new int[]{i - h, j - w};
+                    return new int[]{i-h, j-w};
                 }
             }
         }
 
-        // 안전 영역 없음
         return null;
     }
+
 }
