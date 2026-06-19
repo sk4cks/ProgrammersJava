@@ -2,10 +2,15 @@ import java.util.stream.IntStream;
 
 class Solution {
     public int[] solution(int[] arr, int divisor) {
-        int[] answer = IntStream.of(arr).filter(i -> i%divisor==0).sorted().toArray();
+        // arr 배열에서 divisor로 나누어 떨어지는 요소만 필터링 후 오름차순 정렬
+        int[] answer = IntStream.of(arr)
+                                .filter(i -> i % divisor == 0)
+                                .sorted()
+                                .toArray();
         
-        if (answer.length==0) {
-            answer = new int[]{-1};  
+        // 나누어 떨어지는 요소가 없으면 [-1] 반환
+        if (answer.length == 0) {
+            answer = new int[]{-1};
         }
         
         return answer;
